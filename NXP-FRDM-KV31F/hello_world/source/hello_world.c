@@ -72,12 +72,12 @@ int main(void)
 
     while (1)
     {
-    	if (GPIO_PinRead(BOARD_SW3_GPIO, BOARD_SW3_PIN) == 0 ) {
-    		// when button is press - because pull-up
-    		GPIO_PinWrite(BOARD_LED_RED_GPIO, BOARD_LED_RED_PIN, false);
-    	} else {
-    		GPIO_PinWrite(BOARD_LED_RED_GPIO, BOARD_LED_RED_PIN, true);
-    	}
+    	bool sw2 = GPIO_PinRead(BOARD_SW2_GPIO, BOARD_SW2_PIN);
+		GPIO_PinWrite(BOARD_LED_GREEN_GPIO, BOARD_LED_GREEN_PIN, sw2);
 
+    	bool sw3 = GPIO_PinRead(BOARD_SW3_GPIO, BOARD_SW3_PIN);
+		GPIO_PinWrite(BOARD_LED_RED_GPIO, BOARD_LED_RED_PIN, sw3);
+
+		printf("SW2: %i  SW3: %i\r\n", sw2, sw3);
     }
 }

@@ -72,7 +72,12 @@ int main(void)
 
     while (1)
     {
-    	delay(1000000);
-    	GPIO_PortToggle(BOARD_LED_RED_GPIO, 1u << BOARD_LED_RED_PIN);
+    	if (GPIO_PinRead(BOARD_SW3_GPIO, BOARD_SW3_PIN) == 0 ) {
+    		// when button is press - because pull-up
+    		GPIO_PinWrite(BOARD_LED_RED_GPIO, BOARD_LED_RED_PIN, false);
+    	} else {
+    		GPIO_PinWrite(BOARD_LED_RED_GPIO, BOARD_LED_RED_PIN, true);
+    	}
+
     }
 }

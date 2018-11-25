@@ -46,6 +46,13 @@ void BOARD_InitBootPins(void);
 #define BOARD_LED_RED_PIN 1U     /*!<@brief PORTD pin index: 1 */
                                  /* @} */
 
+/*! @name PORTE4 (number 5), SW3
+  @{ */
+#define BOARD_SW3_GPIO GPIOE /*!<@brief GPIO device name: GPIOE */
+#define BOARD_SW3_PORT PORTE /*!<@brief PORT device name: PORTE */
+#define BOARD_SW3_PIN 4U     /*!<@brief PORTE pin index: 4 */
+                             /* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *

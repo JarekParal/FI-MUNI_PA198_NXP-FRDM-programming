@@ -58,6 +58,11 @@
                         <pin_feature name="direction" value="OUTPUT"/>
                      </pin_features>
                   </pin>
+                  <pin peripheral="GPIOE" signal="GPIO, 4" pin_num="5" pin_signal="PTE4/LLWU_P2/SPI1_PCS0/LPUART0_TX">
+                     <pin_features>
+                        <pin_feature name="direction" value="INPUT"/>
+                     </pin_features>
+                  </pin>
                </pins>
             </function>
          </functions_list>

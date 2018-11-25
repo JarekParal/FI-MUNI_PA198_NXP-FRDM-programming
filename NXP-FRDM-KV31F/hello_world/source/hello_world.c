@@ -51,13 +51,18 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
+static void delay(volatile uint32_t nof) {
+  while(nof!=0) {
+    __asm("NOP");
+    nof--;
+  }
+}
+
 /*!
  * @brief Main function
  */
 int main(void)
 {
-    char ch;
-
     /* Init board hardware. */
     BOARD_InitPins();
     BOARD_BootClockRUN();
@@ -67,7 +72,7 @@ int main(void)
 
     while (1)
     {
-        ch = GETCHAR();
-        PUTCHAR(ch);
+    	delay(1000000);
+    	GPIO_PortToggle(BOARD_LED_RED_GPIO, 1u << BOARD_LED_RED_PIN);
     }
 }

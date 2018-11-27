@@ -55,12 +55,14 @@
  ******************************************************************************/
 
 /* The software timer period. */
-#define SW_TIMER_PERIOD_MS (1000 / portTICK_PERIOD_MS)
+#define SW_TIMER_PERIOD_MS (100 / portTICK_PERIOD_MS)
+#define MESSAGE_TIMER_PERIOD_MS (1000 / portTICK_PERIOD_MS)
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
 /* The callback function. */
 static void SwTimerCallback(TimerHandle_t xTimer);
+static void MessageTimerCallback(TimerHandle_t xTimer);
 
 /*******************************************************************************
  * Code
@@ -71,6 +73,7 @@ static void SwTimerCallback(TimerHandle_t xTimer);
 int main(void)
 {
     TimerHandle_t SwTimerHandle = NULL;
+    TimerHandle_t MessageTimerHandle = NULL;
 
     /* Init board hardware. */
     BOARD_InitPins();
@@ -83,10 +86,22 @@ int main(void)
                                  pdTRUE,             /* Enable auto reload. */
                                  0,                  /* ID is not used. */
                                  SwTimerCallback);   /* The callback function. */
+
+    MessageTimerHandle = xTimerCreate("MessageTimer",          /* Text name. */
+    							 MESSAGE_TIMER_PERIOD_MS, /* Timer period. */
+                                 pdTRUE,             /* Enable auto reload. */
+                                 0,                  /* ID is not used. */
+                                 MessageTimerCallback);   /* The callback function. */
     /* Start timer. */
     xTimerStart(SwTimerHandle, 0);
+    PRINTF("SwTimer - config.\r\n");
+
+    xTimerStart(MessageTimerHandle, 1000);
+    PRINTF("MessageTimer - config.\r\n");
+
     /* Start scheduling. */
     vTaskStartScheduler();
+    PRINTF("vTaskStartScheduler - config.\r\n");
     for (;;)
         ;
 }
@@ -96,5 +111,10 @@ int main(void)
  */
 static void SwTimerCallback(TimerHandle_t xTimer)
 {
-    PRINTF("Tick.\r\n");
+    PRINTF("Sw.\r\n");
+}
+
+static void MessageTimerCallback(TimerHandle_t xTimer)
+{
+    PRINTF("Message.\r\n");
 }

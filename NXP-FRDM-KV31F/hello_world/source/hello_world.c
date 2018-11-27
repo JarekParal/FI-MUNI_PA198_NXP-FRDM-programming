@@ -35,6 +35,7 @@
 #include "fsl_device_registers.h"
 #include "fsl_debug_console.h"
 #include "board.h"
+#include "peripherals.h"
 
 #include "fsl_common.h"
 #include "pin_mux.h"
@@ -58,6 +59,21 @@ static void delay(volatile uint32_t nof) {
   }
 }
 
+volatile bool sw2 = false;
+
+void GPIO_1_IRQHANDLER(void)
+{
+    /* Clear external interrupt flag. */
+    GPIO_PortClearInterruptFlags(BOARD_SW2_GPIO, 1U << BOARD_SW2_PIN);
+    /* Change state of button. */
+    sw2 = true;
+    /* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
+      exception return operation might vector to incorrect interrupt */
+#if defined __CORTEX_M && (__CORTEX_M == 4U)
+    __DSB();
+#endif
+}
+
 /*!
  * @brief Main function
  */
@@ -67,12 +83,12 @@ int main(void)
     BOARD_InitPins();
     BOARD_BootClockRUN();
     BOARD_InitDebugConsole();
-
+    BOARD_InitPeripherals();
     PRINTF("hello world.\r\n");
 
     while (1)
     {
-    	bool sw2 = GPIO_PinRead(BOARD_SW2_GPIO, BOARD_SW2_PIN);
+    	//bool sw2 = GPIO_PinRead(BOARD_SW2_GPIO, BOARD_SW2_PIN);
 		GPIO_PinWrite(BOARD_LED_GREEN_GPIO, BOARD_LED_GREEN_PIN, sw2);
 
     	bool sw3 = GPIO_PinRead(BOARD_SW3_GPIO, BOARD_SW3_PIN);

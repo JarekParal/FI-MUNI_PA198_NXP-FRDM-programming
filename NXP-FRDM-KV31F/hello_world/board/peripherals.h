@@ -6,9 +6,29 @@
 #ifndef _PERIPHERALS_H_
 #define _PERIPHERALS_H_
 
+/***********************************************************************************************************************
+ * Included files
+ **********************************************************************************************************************/
+#include "fsl_common.h"
+#include "fsl_gpio.h"
+#include "fsl_port.h"
+
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
+
+/***********************************************************************************************************************
+ * Definitions
+ **********************************************************************************************************************/
+/* Definitions for BOARD_InitPeripherals functional group */
+/* Alias for GPIOA peripheral */
+#define GPIO_1_GPIO GPIOA
+/* Alias for PORTA */
+#define GPIO_1_PORT PORTA
+/* GPIO_1 interrupt vector ID (number). */
+#define GPIO_1_IRQN PORTA_IRQn
+/* GPIO_1 interrupt handler identifier. */
+#define GPIO_1_IRQHANDLER PORTA_IRQHandler
 
 /***********************************************************************************************************************
  * Initialization functions

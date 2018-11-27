@@ -57,6 +57,13 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
+static void delay(volatile uint32_t nof) {
+  while(nof!=0) {
+    __asm("NOP");
+    nof--;
+  }
+}
+
 /*!
  * @brief Main function
  */
@@ -108,7 +115,7 @@ int main(void)
 
     while (1)
     {
-        GETCHAR();
+        delay(1000000);
         /*
          When in software trigger mode, each conversion would be launched once calling the "ADC16_ChannelConfigure()"
          function, which works like writing a conversion command and executing it. For another channel's conversion,

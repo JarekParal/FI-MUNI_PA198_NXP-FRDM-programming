@@ -89,7 +89,13 @@ int main(void)
     while (1)
     {
     	//bool sw2 = GPIO_PinRead(BOARD_SW2_GPIO, BOARD_SW2_PIN);
-		GPIO_PinWrite(BOARD_LED_GREEN_GPIO, BOARD_LED_GREEN_PIN, sw2);
+        if (sw2)
+        {
+        	GPIO_PortToggle(BOARD_LED_GREEN_GPIO, 1U << BOARD_LED_GREEN_PIN);
+			/* Reset state of button. */
+			sw2 = false;
+			delay(10000);
+        }
 
     	bool sw3 = GPIO_PinRead(BOARD_SW3_GPIO, BOARD_SW3_PIN);
 		GPIO_PinWrite(BOARD_LED_RED_GPIO, BOARD_LED_RED_PIN, sw3);

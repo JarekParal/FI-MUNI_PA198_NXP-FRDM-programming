@@ -43,6 +43,13 @@
 
 /* TODO: insert other definitions and declarations here. */
 
+void delay() {
+	volatile uint32_t x;
+	for(x = 0; x < 1000000; x++) {
+		__NOP();
+	}
+}
+
 /*
  * @brief   Application entry point.
  */
@@ -57,11 +64,10 @@ int main(void) {
 
     PRINTF("Hello World\n");
 
-    /* Force the counter to be placed into memory. */
-    volatile static int i = 0 ;
     /* Enter an infinite loop, just incrementing a counter. */
     while(1) {
-        i++ ;
+        GPIO_TogglePinsOutput(BOARD_LED_GREEN_GPIO, 1 << BOARD_LED_GREEN_PIN);
+        delay();
     }
     return 0 ;
 }

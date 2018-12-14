@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding= "UTF-8" ?>
-<configuration name="MKV31F512xxx12" version="1.4" xsi:schemaLocation="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.4 http://mcuxpresso.nxp.com/XSD/mex_configuration_1.4.xsd" uuid="14c020d2-fd83-4218-b28a-a9e8ea42a883" xmlns="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<configuration name="MKV31F512xxx12" version="1.4" xsi:schemaLocation="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.4 http://mcuxpresso.nxp.com/XSD/mex_configuration_1.4.xsd" uuid="72a30016-9163-455c-8a18-2a271a9dd794" xmlns="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <common>
       <processor>MKV31F512xxx12</processor>
       <package>MKV31F512VLL12</package>
@@ -8,7 +8,7 @@
       <cores selected="core0">
          <core name="Cortex-M4F" id="core0" description="M4 core"/>
       </cores>
-      <description>Configuration imported from LowPowerPWM</description>
+      <description>Configuration imported from MKV31F512xxx12_FTM</description>
    </common>
    <preferences>
       <validate_boot_init_only>true</validate_boot_init_only>
@@ -131,13 +131,30 @@
                   <enableClock>true</enableClock>
                </options>
                <dependencies>
+                  <dependency resourceType="Peripheral" resourceId="FTM0" description="Peripheral FTM0 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
                   <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:BOARD_InitPins">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
                      </feature>
                   </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.port" description="Pins initialization requires the PORT Driver in the project." problem_level="2" source="Pins:BOARD_InitPins">
+                     <feature name="enabled" evaluation="equal" configuration="core0">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
                </dependencies>
-               <pins/>
+               <pins>
+                  <pin peripheral="FTM0" signal="CH, 7" pin_num="100" pin_signal="PTD7/UART0_TX/FTM0_CH7/FTM0_FLT1/SPI1_SIN">
+                     <pin_features>
+                        <pin_feature name="identifier" value=""/>
+                        <pin_feature name="direction" value="OUTPUT"/>
+                     </pin_features>
+                  </pin>
+               </pins>
             </function>
             <function name="BOARD_InitBUTTONs">
                <description>Configures pin routing and optionally pin electrical features.&amp;lt;br/&amp;gt;</description>
@@ -188,7 +205,6 @@
             <function name="BOARD_InitLEDs">
                <description>Configures pin routing and optionally pin electrical features.&amp;lt;br/&amp;gt;</description>
                <options>
-                  <callFromInitBoot>true</callFromInitBoot>
                   <prefix>BOARD_</prefix>
                   <coreID>core0</coreID>
                   <enableClock>true</enableClock>
@@ -572,14 +588,14 @@
       </clocks>
       <periphs name="Peripherals" version="4.1" enabled="true" update_project_code="true">
          <dependencies>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.lptmr" description="LPTMR Driver not found in the toolchain/IDE project." problem_level="2" source="Peripherals">
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.ftm" description="FTM Driver not found in the toolchain/IDE project." problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
                </feature>
             </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.lptmr" description="Unsupported version of the LPTMR Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}." problem_level="1" source="Peripherals">
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.ftm" description="Unsupported version of the FTM Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}." problem_level="1" source="Peripherals">
                <feature name="version" evaluation="compatible">
-                  <data type="Version">2.0.1</data>
+                  <data type="Version">2.0.2</data>
                </feature>
             </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.drivers.gpio" description="GPIO Driver not found in the toolchain/IDE project." problem_level="2" source="Peripherals">
@@ -627,41 +643,83 @@
             <processor_version>4.0.1</processor_version>
          </peripherals_profile>
          <functional_groups>
-            <functional_group name="BOARD_InitPeripherals" uuid="be882ea8-cf05-4ab0-ae7b-a7a2eb753109" called_from_default_init="true" id_prefix="" core="core0">
+            <functional_group name="BOARD_InitPeripherals" uuid="037000c1-9d1b-4a5a-863d-5f09aedb95e8" called_from_default_init="true" id_prefix="" core="core0">
                <description></description>
                <options/>
                <dependencies>
-                  <dependency resourceType="ClockOutput" resourceId="LPO_clock" description="LPO clock is inactive." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
+                  <dependency resourceType="ClockOutput" resourceId="Bus_clock" description="Bus clock is inactive." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="frequency" evaluation="greaterThan">
                         <data type="Frequency" unit="Hz">0</data>
                      </feature>
                   </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="FTM0.tmr_ch.7" description="Signal CH7 of peripheral FTM0 is not routed" problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
                </dependencies>
                <instances>
-                  <instance name="LPTMR_1" type="lptmr" type_id="lptmr_2eeab91a1a42f8238f9ac768f18c65ae" mode="LPTMR_GENERAL" peripheral="LPTMR0" enabled="true">
-                     <config_set name="fsl_lptmr">
-                        <setting name="enableInterrupt" value="true"/>
-                        <struct name="interrupt">
-                           <setting name="IRQn" value="LPTMR0_IRQn"/>
+                  <instance name="FTM_1" type="ftm" type_id="ftm_5e037045c21cf6f361184c371dbbbab2" mode="EdgeAligned" peripheral="FTM0" enabled="true">
+                     <config_set name="ftm_main_config">
+                        <struct name="ftm_config">
+                           <setting name="clockSource" value="kFTM_SystemClock"/>
+                           <setting name="clockSourceFreq" value="GetFreq"/>
+                           <setting name="prescale" value="kFTM_Prescale_Divide_128"/>
+                           <setting name="timerFrequency" value="5000"/>
+                           <setting name="bdmMode" value="kFTM_BdmMode_0"/>
+                           <set name="pwmSyncMode">
+                              <selected>
+                                 <id>kFTM_SoftwareTrigger</id>
+                              </selected>
+                           </set>
+                           <set name="reloadPoints">
+                              <selected/>
+                           </set>
+                           <setting name="faultMode" value="kFTM_Fault_Disable"/>
+                           <setting name="faultFilterValue" value="0"/>
+                           <setting name="deadTimePrescale" value="kFTM_Deadtime_Prescale_1"/>
+                           <setting name="deadTimeValue" value="0"/>
+                           <set name="extTriggers">
+                              <selected/>
+                           </set>
+                           <set name="chnlInitState">
+                              <selected>
+                                 <id>kFTM_Chnl7OutInitHighLevel</id>
+                              </selected>
+                           </set>
+                           <set name="chnlPolarity">
+                              <selected/>
+                           </set>
+                           <setting name="useGlobalTimeBase" value="false"/>
+                        </struct>
+                        <set name="timer_interrupts">
+                           <selected/>
+                        </set>
+                        <setting name="enable_irq" value="false"/>
+                        <struct name="ftm_interrupt">
+                           <setting name="IRQn" value="FTM0_IRQn"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="enable_custom_name" value="false"/>
                         </struct>
-                        <struct name="lptmr_config">
-                           <setting name="timerMode" value="kLPTMR_TimerModeTimeCounter"/>
-                           <setting name="pinSelect" value="ALT.0"/>
-                           <setting name="pinPolarity" value="kLPTMR_PinPolarityActiveHigh"/>
-                           <setting name="enableFreeRunning" value="false"/>
-                           <setting name="bypassPrescaler" value="true"/>
-                           <setting name="prescalerClockSource" value="kLPTMR_PrescalerClock_1"/>
-                           <setting name="clockSource" value="BOARD_BootClockRUN"/>
-                           <setting name="value" value="kLPTMR_Prescale_Glitch_0"/>
-                           <setting name="timerPeriod" value="5000000"/>
-                        </struct>
+                        <setting name="EnableTimerInInit" value="true"/>
+                     </config_set>
+                     <config_set name="ftm_edge_aligned_mode">
+                        <array name="ftm_edge_aligned_channels_config">
+                           <struct name="0">
+                              <setting name="edge_aligned_mode" value="kFTM_EdgeAlignedPwm"/>
+                              <struct name="edge_aligned_pwm">
+                                 <setting name="chnlNumber" value="kFTM_Chnl_7"/>
+                                 <setting name="level" value="kFTM_LowTrue"/>
+                                 <setting name="dutyCyclePercent" value="50"/>
+                                 <setting name="enable_chan_irq" value="false"/>
+                              </struct>
+                           </struct>
+                        </array>
                      </config_set>
                   </instance>
                </instances>
             </functional_group>
-            <functional_group name="BOARD_InitBUTTONsPeripheral" uuid="9dc5a576-3663-4ba9-9c4d-f8d3c9d4a5d6" called_from_default_init="false" id_prefix="BOARD_" core="core0">
+            <functional_group name="BOARD_InitBUTTONsPeripheral" uuid="2b9046a0-e3f2-4ac0-8d6c-1b5ad3234e67" called_from_default_init="false" id_prefix="BOARD_" core="core0">
                <description></description>
                <options/>
                <dependencies/>
@@ -688,7 +746,7 @@
                   </instance>
                </instances>
             </functional_group>
-            <functional_group name="BOARD_InitLEDsPeripheral" uuid="46f426dd-a8da-4514-8eab-8b76b2cddae8" called_from_default_init="false" id_prefix="BOARD_" core="core0">
+            <functional_group name="BOARD_InitLEDsPeripheral" uuid="3d47d381-e2f3-4917-ab9a-185eed5e0838" called_from_default_init="false" id_prefix="BOARD_" core="core0">
                <description></description>
                <options/>
                <dependencies/>
@@ -715,7 +773,7 @@
                   </instance>
                </instances>
             </functional_group>
-            <functional_group name="BOARD_InitDEBUG_UARTPeripheral" uuid="b4fcc2eb-85a4-42f7-96a7-8d9ede16cb4a" called_from_default_init="false" id_prefix="BOARD_" core="core0">
+            <functional_group name="BOARD_InitDEBUG_UARTPeripheral" uuid="05be0a46-9a43-4872-b0f5-271b61e8eac1" called_from_default_init="false" id_prefix="BOARD_" core="core0">
                <description></description>
                <options/>
                <dependencies>
@@ -743,7 +801,7 @@
                   </instance>
                </instances>
             </functional_group>
-            <functional_group name="BOARD_InitACCELPeripheral" uuid="f33e5ddf-1a6a-4cb3-be4b-a2e3d0399be0" called_from_default_init="false" id_prefix="BOARD_" core="core0">
+            <functional_group name="BOARD_InitACCELPeripheral" uuid="c1be5932-b218-4d1c-a4db-0d56ff1cf70d" called_from_default_init="false" id_prefix="BOARD_" core="core0">
                <description></description>
                <options/>
                <dependencies>
@@ -799,7 +857,7 @@
                   </instance>
                </instances>
             </functional_group>
-            <functional_group name="BOARD_InitTHERPeripheral" uuid="4b530010-582c-4c2c-a7b2-010ee0f27a5e" called_from_default_init="false" id_prefix="BOARD_" core="core0">
+            <functional_group name="BOARD_InitTHERPeripheral" uuid="3b66d187-0f3f-489d-aa05-634b6d193d0e" called_from_default_init="false" id_prefix="BOARD_" core="core0">
                <description></description>
                <options/>
                <dependencies>

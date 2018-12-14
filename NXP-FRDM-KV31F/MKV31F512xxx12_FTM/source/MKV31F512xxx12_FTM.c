@@ -29,7 +29,7 @@
  */
  
 /**
- * @file    LowPowerPWM.c
+ * @file    MKV31F512xxx12_FTM.c
  * @brief   Application entry point.
  */
 #include <stdio.h>
@@ -39,31 +39,21 @@
 #include "clock_config.h"
 #include "MKV31F51212.h"
 #include "fsl_debug_console.h"
-#include "fsl_llwu.h"
-#include "fsl_smc.h"
 /* TODO: insert other include files here. */
 
 /* TODO: insert other definitions and declarations here. */
 
 void delay() {
 	volatile uint32_t x;
-	for(x = 0; x < 1000000; x++) {
+	for(x = 0; x < 1000; x++) {
 		__NOP();
 	}
 }
-
-void LLWU_1_IQRHANDLER() {
-	LLWU_GetInternalWakeupModuleFlag(LLWU, 0);
-	LPTMR_ClearStatusFlags(LPTMR_1_PERIPHERAL, kLPTMR_TimerCompareFlag);
-}
-
-smc_power_mode_vlls_config_t vlls_config;
 
 /*
  * @brief   Application entry point.
  */
 int main(void) {
-	SMC_SetPowerModeProtection(SMC, kSMC_AllowPowerModeAll);
 
   	/* Init board hardware. */
     BOARD_InitBootPins();
@@ -72,22 +62,18 @@ int main(void) {
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
 
-    PRINTF("Hello World\n");
+    //PRINTF("Hello World\n");
 
-    /* Enable module 0 as the wakeup source. */
-    LLWU_EnableInternalModuleInterruptWakup(LLWU, 0U, true);
-
-    LPTMR_StartTimer(LPTMR_1_PERIPHERAL);
-
-	uint8_t i;
+    /* Force the counter to be placed into memory. */
+    volatile static int i = 0 ;
+    /* Enter an infinite loop, just incrementing a counter. */
     while(1) {
-        for(i = 0; i < 6; ++i) {
-            GPIO_TogglePinsOutput(BOARD_LED_GREEN_GPIO, 1 << BOARD_LED_GREEN_PIN);
-            delay();
-        }
-        vlls_config.subMode = kSMC_StopSub3;
-        SMC_PreEnterStopModes();
-        SMC_SetPowerModeVlls(SMC, &vlls_config);
+    	if(i == 100) {
+    		i = 0;
+    	}
+    	FTM_UpdatePwmDutycycle(FTM_1_PERIPHERAL, 7, kFTM_EdgeAlignedPwm, i);
+    	delay();
+        i++ ;
     }
     return 0 ;
 }

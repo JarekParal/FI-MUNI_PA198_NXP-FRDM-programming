@@ -10,11 +10,11 @@
  * Included files
  **********************************************************************************************************************/
 #include "fsl_common.h"
-#include "fsl_lptmr.h"
+#include "fsl_clock.h"
+#include "fsl_ftm.h"
 #include "fsl_gpio.h"
 #include "fsl_port.h"
 #include "fsl_uart.h"
-#include "fsl_clock.h"
 #include "fsl_i2c.h"
 #include "fsl_adc16.h"
 
@@ -26,21 +26,14 @@ extern "C" {
  * Definitions
  **********************************************************************************************************************/
 /* Definitions for BOARD_InitPeripherals functional group */
-/* BOARD_InitPeripherals defines for LPTMR0 */
 /* Definition of peripheral ID */
-#define LPTMR_1_PERIPHERAL LPTMR0
+#define FTM_1_PERIPHERAL FTM0
 /* Definition of the clock source frequency */
-#define LPTMR_1_CLK_FREQ 1000UL
-/* Definition of the prescaled clock source frequency */
-#define LPTMR_1_INPUT_FREQ 1000UL
-/* Definition of the timer period in us */
-#define LPTMR_1_USEC_COUNT 5000000UL
-/* Definition of the timer period in number of ticks */
-#define LPTMR_1_TICKS 5000UL
-/* LPTMR_1 interrupt vector ID (number). */
-#define LPTMR_1_IRQN LPTMR0_IRQn
-/* LPTMR_1 interrupt handler identifier. */
-#define LPTMR_1_IRQHANDLER LPTMR0_IRQHandler
+#define FTM_1_CLOCK_SOURCE CLOCK_GetFreq(kCLOCK_BusClk)
+/* FTM_1 interrupt vector ID (number). */
+#define FTM_1_IRQN FTM0_IRQn
+/* FTM_1 interrupt handler identifier. */
+#define FTM_1_IRQHANDLER FTM0_IRQHandler
 
 /* Definitions for BOARD_InitBUTTONsPeripheral functional group */
 /* Alias for GPIOE peripheral */
@@ -84,7 +77,7 @@ extern "C" {
 /***********************************************************************************************************************
  * Global variables
  **********************************************************************************************************************/
-extern const lptmr_config_t LPTMR_1_config;
+extern const ftm_config_t FTM_1_config;
 extern const uart_config_t BOARD_DEBUG_UART_config;
 extern const i2c_master_config_t BOARD_ACCEL_I2C_config;
 extern adc16_channel_config_t BOARD_THERMOMETER_channelsConfig[1];

@@ -50,55 +50,80 @@ component:
  * BOARD_InitPeripherals functional group
  **********************************************************************************************************************/
 /***********************************************************************************************************************
- * LPTMR_1 initialization code
+ * FTM_1 initialization code
  **********************************************************************************************************************/
 /* clang-format off */
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 instance:
-- name: 'LPTMR_1'
-- type: 'lptmr'
-- mode: 'LPTMR_GENERAL'
-- type_id: 'lptmr_2eeab91a1a42f8238f9ac768f18c65ae'
+- name: 'FTM_1'
+- type: 'ftm'
+- mode: 'EdgeAligned'
+- type_id: 'ftm_5e037045c21cf6f361184c371dbbbab2'
 - functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'LPTMR0'
+- peripheral: 'FTM0'
 - config_sets:
-  - fsl_lptmr:
-    - enableInterrupt: 'true'
-    - interrupt:
-      - IRQn: 'LPTMR0_IRQn'
+  - ftm_main_config:
+    - ftm_config:
+      - clockSource: 'kFTM_SystemClock'
+      - clockSourceFreq: 'GetFreq'
+      - prescale: 'kFTM_Prescale_Divide_128'
+      - timerFrequency: '5000'
+      - bdmMode: 'kFTM_BdmMode_0'
+      - pwmSyncMode: 'kFTM_SoftwareTrigger'
+      - reloadPoints: ''
+      - faultMode: 'kFTM_Fault_Disable'
+      - faultFilterValue: '0'
+      - deadTimePrescale: 'kFTM_Deadtime_Prescale_1'
+      - deadTimeValue: '0'
+      - extTriggers: ''
+      - chnlInitState: 'kFTM_Chnl7OutInitHighLevel'
+      - chnlPolarity: ''
+      - useGlobalTimeBase: 'false'
+    - timer_interrupts: ''
+    - enable_irq: 'false'
+    - ftm_interrupt:
+      - IRQn: 'FTM0_IRQn'
       - enable_priority: 'false'
       - enable_custom_name: 'false'
-    - lptmr_config:
-      - timerMode: 'kLPTMR_TimerModeTimeCounter'
-      - pinSelect: 'ALT.0'
-      - pinPolarity: 'kLPTMR_PinPolarityActiveHigh'
-      - enableFreeRunning: 'false'
-      - bypassPrescaler: 'true'
-      - prescalerClockSource: 'kLPTMR_PrescalerClock_1'
-      - clockSource: 'BOARD_BootClockRUN'
-      - value: 'kLPTMR_Prescale_Glitch_0'
-      - timerPeriod: '5000000'
+    - EnableTimerInInit: 'true'
+  - ftm_edge_aligned_mode:
+    - ftm_edge_aligned_channels_config:
+      - 0:
+        - edge_aligned_mode: 'kFTM_EdgeAlignedPwm'
+        - edge_aligned_pwm:
+          - chnlNumber: 'kFTM_Chnl_7'
+          - level: 'kFTM_LowTrue'
+          - dutyCyclePercent: '50'
+          - enable_chan_irq: 'false'
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
-const lptmr_config_t LPTMR_1_config = {
-  .timerMode = kLPTMR_TimerModeTimeCounter,
-  .pinSelect = kLPTMR_PinSelectInput_0,
-  .pinPolarity = kLPTMR_PinPolarityActiveHigh,
-  .enableFreeRunning = false,
-  .bypassPrescaler = true,
-  .prescalerClockSource = kLPTMR_PrescalerClock_1,
-  .value = kLPTMR_Prescale_Glitch_0
+const ftm_config_t FTM_1_config = {
+  .prescale = kFTM_Prescale_Divide_128,
+  .bdmMode = kFTM_BdmMode_0,
+  .pwmSyncMode = kFTM_SoftwareTrigger,
+  .reloadPoints = 0,
+  .faultMode = kFTM_Fault_Disable,
+  .faultFilterValue = 0,
+  .deadTimePrescale = kFTM_Deadtime_Prescale_1,
+  .deadTimeValue = 0,
+  .extTriggers = 0,
+  .chnlInitState = 128,
+  .chnlPolarity = 0,
+  .useGlobalTimeBase = false
 };
 
-void LPTMR_1_init(void) {
-  /* Initialize the LPTMR */
-  LPTMR_Init(LPTMR_1_PERIPHERAL, &LPTMR_1_config);
-  /* Set LPTMR period to 5000000us */
-  LPTMR_SetTimerPeriod(LPTMR_1_PERIPHERAL, LPTMR_1_TICKS);
-  /* Configure timer interrupt */
-  LPTMR_EnableInterrupts(LPTMR_1_PERIPHERAL, kLPTMR_TimerInterruptEnable);
-  /* Enable interrupt LPTMR0_IRQn request in the NVIC */
-  EnableIRQ(LPTMR0_IRQn);
+const ftm_chnl_pwm_signal_param_t FTM_1_pwmSignalParams[] = { 
+  {
+    .chnlNumber = kFTM_Chnl_7,
+    .level = kFTM_LowTrue,
+    .dutyCyclePercent = 50
+  }
+};
+
+void FTM_1_init(void) {
+  FTM_Init(FTM_1_PERIPHERAL, &FTM_1_config);
+  FTM_SetupPwm(FTM_1_PERIPHERAL, FTM_1_pwmSignalParams, sizeof(FTM_1_pwmSignalParams) / sizeof(ftm_chnl_pwm_signal_param_t), kFTM_EdgeAlignedPwm, 5000U, FTM_1_CLOCK_SOURCE);
+  FTM_StartTimer(FTM_1_PERIPHERAL, kFTM_SystemClock);
 }
 
 /***********************************************************************************************************************
@@ -431,7 +456,7 @@ void BOARD_THERMOMETER_init(void) {
 void BOARD_InitPeripherals(void)
 {
   /* Initialize components */
-  LPTMR_1_init();
+  FTM_1_init();
 }
 
 void BOARD_InitBUTTONsPeripheral(void)

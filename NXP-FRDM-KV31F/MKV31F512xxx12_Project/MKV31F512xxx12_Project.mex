@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding= "UTF-8" ?>
-<configuration name="MKV31F512xxx12" version="1.4" xsi:schemaLocation="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.4 http://mcuxpresso.nxp.com/XSD/mex_configuration_1.4.xsd" uuid="14c020d2-fd83-4218-b28a-a9e8ea42a883" xmlns="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<configuration name="MKV31F512xxx12" version="1.4" xsi:schemaLocation="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.4 http://mcuxpresso.nxp.com/XSD/mex_configuration_1.4.xsd" uuid="9431a8e5-edd0-4507-9856-90b3cf9f9bb0" xmlns="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <common>
       <processor>MKV31F512xxx12</processor>
       <package>MKV31F512VLL12</package>
@@ -8,7 +8,7 @@
       <cores selected="core0">
          <core name="Cortex-M4F" id="core0" description="M4 core"/>
       </cores>
-      <description>Configuration imported from LowPowerPWM</description>
+      <description>Configuration imported from MKV31F512xxx12_Project</description>
    </common>
    <preferences>
       <validate_boot_init_only>true</validate_boot_init_only>
@@ -188,7 +188,6 @@
             <function name="BOARD_InitLEDs">
                <description>Configures pin routing and optionally pin electrical features.&amp;lt;br/&amp;gt;</description>
                <options>
-                  <callFromInitBoot>true</callFromInitBoot>
                   <prefix>BOARD_</prefix>
                   <coreID>core0</coreID>
                   <enableClock>true</enableClock>
@@ -572,16 +571,6 @@
       </clocks>
       <periphs name="Peripherals" version="4.1" enabled="true" update_project_code="true">
          <dependencies>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.lptmr" description="LPTMR Driver not found in the toolchain/IDE project." problem_level="2" source="Peripherals">
-               <feature name="enabled" evaluation="equal">
-                  <data type="Boolean">true</data>
-               </feature>
-            </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.lptmr" description="Unsupported version of the LPTMR Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}." problem_level="1" source="Peripherals">
-               <feature name="version" evaluation="compatible">
-                  <data type="Version">2.0.1</data>
-               </feature>
-            </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.drivers.gpio" description="GPIO Driver not found in the toolchain/IDE project." problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
@@ -627,41 +616,13 @@
             <processor_version>4.0.1</processor_version>
          </peripherals_profile>
          <functional_groups>
-            <functional_group name="BOARD_InitPeripherals" uuid="be882ea8-cf05-4ab0-ae7b-a7a2eb753109" called_from_default_init="true" id_prefix="" core="core0">
+            <functional_group name="BOARD_InitPeripherals" uuid="285cfbb5-6192-444d-8f86-79ba88c0ae5f" called_from_default_init="true" id_prefix="" core="core0">
                <description></description>
                <options/>
-               <dependencies>
-                  <dependency resourceType="ClockOutput" resourceId="LPO_clock" description="LPO clock is inactive." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="frequency" evaluation="greaterThan">
-                        <data type="Frequency" unit="Hz">0</data>
-                     </feature>
-                  </dependency>
-               </dependencies>
-               <instances>
-                  <instance name="LPTMR_1" type="lptmr" type_id="lptmr_2eeab91a1a42f8238f9ac768f18c65ae" mode="LPTMR_GENERAL" peripheral="LPTMR0" enabled="true">
-                     <config_set name="fsl_lptmr">
-                        <setting name="enableInterrupt" value="true"/>
-                        <struct name="interrupt">
-                           <setting name="IRQn" value="LPTMR0_IRQn"/>
-                           <setting name="enable_priority" value="false"/>
-                           <setting name="enable_custom_name" value="false"/>
-                        </struct>
-                        <struct name="lptmr_config">
-                           <setting name="timerMode" value="kLPTMR_TimerModeTimeCounter"/>
-                           <setting name="pinSelect" value="ALT.0"/>
-                           <setting name="pinPolarity" value="kLPTMR_PinPolarityActiveHigh"/>
-                           <setting name="enableFreeRunning" value="false"/>
-                           <setting name="bypassPrescaler" value="true"/>
-                           <setting name="prescalerClockSource" value="kLPTMR_PrescalerClock_1"/>
-                           <setting name="clockSource" value="BOARD_BootClockRUN"/>
-                           <setting name="value" value="kLPTMR_Prescale_Glitch_0"/>
-                           <setting name="timerPeriod" value="5000000"/>
-                        </struct>
-                     </config_set>
-                  </instance>
-               </instances>
+               <dependencies/>
+               <instances/>
             </functional_group>
-            <functional_group name="BOARD_InitBUTTONsPeripheral" uuid="9dc5a576-3663-4ba9-9c4d-f8d3c9d4a5d6" called_from_default_init="false" id_prefix="BOARD_" core="core0">
+            <functional_group name="BOARD_InitBUTTONsPeripheral" uuid="a22ca1a1-a9be-42d0-bf70-0908f8febd24" called_from_default_init="false" id_prefix="BOARD_" core="core0">
                <description></description>
                <options/>
                <dependencies/>
@@ -688,7 +649,7 @@
                   </instance>
                </instances>
             </functional_group>
-            <functional_group name="BOARD_InitLEDsPeripheral" uuid="46f426dd-a8da-4514-8eab-8b76b2cddae8" called_from_default_init="false" id_prefix="BOARD_" core="core0">
+            <functional_group name="BOARD_InitLEDsPeripheral" uuid="0cd727c5-b18c-4480-b8c9-fab87f78c86c" called_from_default_init="false" id_prefix="BOARD_" core="core0">
                <description></description>
                <options/>
                <dependencies/>
@@ -715,7 +676,7 @@
                   </instance>
                </instances>
             </functional_group>
-            <functional_group name="BOARD_InitDEBUG_UARTPeripheral" uuid="b4fcc2eb-85a4-42f7-96a7-8d9ede16cb4a" called_from_default_init="false" id_prefix="BOARD_" core="core0">
+            <functional_group name="BOARD_InitDEBUG_UARTPeripheral" uuid="ced6add0-26c1-471e-ad16-933e6971be61" called_from_default_init="false" id_prefix="BOARD_" core="core0">
                <description></description>
                <options/>
                <dependencies>
@@ -743,7 +704,7 @@
                   </instance>
                </instances>
             </functional_group>
-            <functional_group name="BOARD_InitACCELPeripheral" uuid="f33e5ddf-1a6a-4cb3-be4b-a2e3d0399be0" called_from_default_init="false" id_prefix="BOARD_" core="core0">
+            <functional_group name="BOARD_InitACCELPeripheral" uuid="1188ef33-85fc-4266-bcc1-9e2d1e29e40b" called_from_default_init="false" id_prefix="BOARD_" core="core0">
                <description></description>
                <options/>
                <dependencies>
@@ -799,7 +760,7 @@
                   </instance>
                </instances>
             </functional_group>
-            <functional_group name="BOARD_InitTHERPeripheral" uuid="4b530010-582c-4c2c-a7b2-010ee0f27a5e" called_from_default_init="false" id_prefix="BOARD_" core="core0">
+            <functional_group name="BOARD_InitTHERPeripheral" uuid="4d709688-f099-4188-a620-1dda46feb2b2" called_from_default_init="false" id_prefix="BOARD_" core="core0">
                <description></description>
                <options/>
                <dependencies>
